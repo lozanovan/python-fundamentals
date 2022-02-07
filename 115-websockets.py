@@ -3,7 +3,7 @@ import websocket, json, statistics
 
 #buffer dictionary with prices list: key: start minute; value: list of prices
 price_list = {}
-#sum of the price volumes product for each entity per minute
+#sum of the price volumes product for each entity per interval
 price_volume_sum = 0.0
 volume_sum = 0.0
 vwap = 0.0
@@ -23,7 +23,7 @@ def sort_message(message):
         print(data['s'], "|", "time:", ts, " price:" , data['p'], " volume:", data['v'])        
         print(" ")
         
-        #calculate avg price per minute
+        #calculate avg price per interval
         if(start_time is not None):
             if(data['t']/1000.0 < end_time and start_time in price_list):
                 
@@ -31,7 +31,7 @@ def sort_message(message):
                 price_volume_sum = price_volume_sum + (data['v'] * data['p'])
                 volume_sum = volume_sum + data['v']                        
             else:
-                #buffers are being restarted for the next minute
+                #buffers are being restarted for the next interval
                 start_time=data['t']/1000.0
                 end_time=data['t']/1000.0 + 60
 
